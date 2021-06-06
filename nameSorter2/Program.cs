@@ -8,21 +8,27 @@ namespace nameSorter2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Sorting string in file \"" + args[0] + "\"");
-            List<string> names = new(File.ReadAllLines(args[0]));
-            Console.WriteLine("Original:");
-            foreach (string line in names)
+            if(args.Length != 1)
             {
-                Console.WriteLine(line);
-            }
-
-            Utils.NameSort(names);
-            Console.WriteLine("sorted:");
-            foreach (string line in names)
+                Console.WriteLine("Error: Name sorter requires exactly 1 argument [file to be sorted]");
+            } else
             {
-                Console.WriteLine(line);
+                try
+                {
+                    Console.WriteLine("Sorting names in file \"" + args[0] + "\":");
+                    List<string> names = new(File.ReadAllLines(args[0]));
+                    Utils.NameSort(names);
+                    File.WriteAllLines(System.IO.Directory.GetCurrentDirectory() + 
+                        "\\sorted-names-list.txt", names.ToArray());
+                    foreach(string name in names)
+                    {
+                        Console.WriteLine(name);
+                    }
+                } catch (System.IO.FileNotFoundException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            File.WriteAllLines("sorted-names-list.txt", names.ToArray());
         }
     }
 }
